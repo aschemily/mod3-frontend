@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const memeTextInput = document.querySelector('#meme-text-input')
   const memeImageInput = document.querySelector('#meme-image-input')
 
+
   fetch(API_END)
   .then(r => r.json())
   .then(memesObj => {
@@ -30,33 +31,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
 memeContainer.addEventListener('click', (e) => {
   if (e.target.dataset.action === 'edit') {
-    let inputTitle = document.querySelector('#meme-title-input').innerHTML
-    let inputText = memeTextInput.innerHTML
-    let inputImage = memeImageInput.innerHTML
+    let foundMeme = ALLMEMES.find(meme => {
+      return e.target.dataset.id == meme.id
+    })
+    let inputTitle = foundMeme.attributes.title
+    let inputText = foundMeme.attributes["meme-text"]
+    let inputImage = foundMeme.attributes.image
     let memeId = e.target.dataset.id
-
-    console.log(memeTitleInput)
-
-    return memeContainer.innerHTML += `
-    <form class="edit-meme-form" style="">
-      <h3>Create a Meme!</h3>
-   <input id="meme-title-input"type="text" name="name" value="${inputTitle}">
+    const meme = document.querySelector('#meme')
+    return e.target.parentElement.innerHTML += `
+    <form class="edit-meme-form" data-id="${memeId}">
+      <h3>Edit a Meme!</h3>
+      <label for="edit-meme">Title</label>
+   <input id="edit-title-input"type="text" name="name" value="${inputTitle}">
    <br>
-   <input id="meme-text-input"type="text" name="name" value="${inputText}">
+   <label for="edit-meme">Text</label>
+   <input id="edit-text-input"type="text" name="name" value="${inputText}">
    <br>
-   <input id="meme-image-input"type="text" name="image" value="${inputImage}">
+   <label for="edit-meme">Image</label>
+   <input id="edit-image-input"type="text" name="image" value="${inputImage}">
    <br>
-   <input type="submit" name="submit" value="Create New Meme" class="submit">
+   <input type="submit" name="submit" value="Submit" class="submit">
   </form>`
-    // fetch(`${API_END}/${memeId}`, {method: "GET"})
-    // .then(r => r.json())
-    // .then(objToEdit => {
-    //   editForm.dataset.id = objToEdit.data.id
-    //   inputTitle.value = objToEdit.dataset
-    //   inputText.value =
-    //   inputImage.value =
-    // })
   }
+})
+
+memeContainer.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  let editTitleInput = document.querySelector('#edit-title-input')
+  let editTextInput = document.querySelector('#edit-text-input')
+  let editImageInput = document.querySelector('#edit-image-input')
+  //console.log(e.target.dataset.id)
+  let memeId = e.target.dataset.id
+  console.log(editTitleInput.value);
+  fetch(`${API_END}/${memeId}`,{
+    method: "PATCH",
+    headers:{
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      title: editTitleInput.value,
+      meme_text: editTextInput.value,
+      image: editImageInput.value
+    })
+  }).then(r => r.json())
+  .then((updatedData)=>{
+    let foundMeme = ALLMEMES.find(meme => {
+      return updatedData.data.id == meme.id
+    })
+
+    const indexOfFoundMeme = ALLMEMES.indexOf(foundMeme)
+
+    ALLMEMES[indexOfFoundMeme] = updatedData.data
+
+    document.querySelector('#meme').innerHTML = memeHTML(updatedData.data)
+    })
 })
 
 memeForm.addEventListener('submit',(e)=>{
@@ -94,9 +125,11 @@ const renderAllMemes = () => {
 }
 
 const memeHTML = (meme) => {
-  return `<li>${meme.attributes.title}</li>
-    <h3>${meme.attributes["meme-text"]}</h3>
-    <img src="${meme.attributes.image}">
+  return `<div id="meme">
+  <li id="meme-title">${meme.attributes.title}</li>
+    <h3 id="meme-text">${meme.attributes["meme-text"]}</h3>
+    <img id="meme-image"src="${meme.attributes.image}">
     <button data-id="${meme.id}" data-action="edit"type="button">Edit Meme</button>
-    <button data-id="${meme.id}" data-action="delete"type="button">Delete Meme</button>`
+    <button data-id="${meme.id}" data-action="delete"type="button">Delete Meme</button>
+    </div>`
 }
