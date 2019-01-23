@@ -1,3 +1,4 @@
+
 button {
   position: relative;
   background-color: #e04b52;
@@ -21,7 +22,7 @@ button:hover {
   width: stretch;
   height: auto;
   display: none;
-  background: #515DA2;
+  background: white;
   opacity: .8;
 }
 
@@ -31,7 +32,7 @@ button:hover {
 
 .submit {
   position: relative;
-  background-color: #e04b52;
+  background-color: black;
   border-radius: 5px;
   height: 2rem;
   width: max-content;
@@ -46,4 +47,64 @@ button:hover {
   background-color: whitesmoke;
   border: #e04b52 solid 1px;
   color: #e04b52;
+}
+
+.edit-meme-form {
+  display: none;
+}
+
+.meme-image-container {
+  position: relative;
+}
+
+.text-block {
+ position: absolute;
+ top: 1px;
+ right: 5px;
+ left: 5px;
+ text-shadow: 2px 2px black;
+ font-family: impact;
+ font-size: 50px;
+ color: white;
+ word-wrap: break-word;
+}
+
+#h3-blocks {
+  font-size: 3vw;
+  text-transform: uppercase;
+  font-family: impact;
+}
+
+.ui.justified.huge.header {
+  font-size: 4rem;
+  animation: color-me-in 10s infinite;
+}
+@keyframes color-me-in {
+  0% {
+    color: blue;
+  }
+  25% {
+    color: red;
+  }
+  50% {
+    color: orange;
+  }
+  75% {
+    color: green;
+  }
+  100% {
+    color: purple;
+  }
+}
+#flex-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card {
+  height: 35em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
