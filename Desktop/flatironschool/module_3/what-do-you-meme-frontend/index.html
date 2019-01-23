@@ -2,27 +2,31 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>AlwaysNote</title>
+    <title>What Do You Meme?</title>
     <script src="src/index.js" charset="utf-8"></script>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
   </head>
-  <body>
-    <h1>MEMES</h1>
+  <body style="background: black;">
+    <div class="ui justified huge header" style="color: white;" align="center">DO YOU EVEN MEME?!</div>
     <div class="container">
       <form class="add-meme-form" style="">
-        <h3>Create a Meme!</h3>
-     <input id="meme-title-input"type="text" name="name" value="" placeholder="Enter a Meme title..." class="input-text">
-     <br>
-     <input id="meme-text-input"type="text" name="name" value="" placeholder="Enter Meme text..." class="input-text">
-     <br>
-     <input id="meme-image-input"type="text" name="image" value="" placeholder="Enter a meme's image URL..." class="input-text">
-     <br>
-     <input type="submit" name="submit" value="Create New Meme" class="submit">
-    </form>
+        <div class="ui form" align="center">
+          <div class="inline fields">
+            <h3>Create a Meme!</h3>
+            <input id="meme-title-input"type="text" name="name" value="" placeholder="Enter a Meme title..." class="input-text">
+            <br>
+            <input id="meme-text-input"type="text" name="name" value="" placeholder="Enter Meme text..." class="input-text">
+            <br>
+            <input id="meme-image-input"type="text" name="image" value="" placeholder="Enter a meme's image URL..." class="input-text">
+            <br>
+            <input type="submit" name="submit" value="Create New Meme" class="submit">
+          </div>
+        </div>
+      </form>
   </div>
   <button id='new-meme-btn'>Add a new Meme!</button>
-    <ul id='memes-list'></ul>
-    <div id='update'></div>
-
+    <div align="center" class="ui four column stackable center aligned page grid" id='memes-list'>
+    </div>
   </body>
 </html>

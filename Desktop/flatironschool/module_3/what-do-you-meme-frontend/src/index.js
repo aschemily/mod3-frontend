@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   * Variables and Data
   *****************************************************************************/
   let addMeme = false
+  let editMeme = false
   const memeContainer = document.querySelector('#memes-list')
   const addBtn = document.querySelector('#new-meme-btn')
   const memeForm = document.querySelector('.container')
@@ -44,55 +45,49 @@ document.addEventListener('DOMContentLoaded', () => {
       let foundMeme = ALLMEMES.find(meme => {
         return e.target.dataset.id == meme.id
       })
-      let inputTitle = foundMeme.attributes.title
-      let inputText = foundMeme.attributes["meme-text"]
-      let inputImage = foundMeme.attributes.image
-      let memeId = e.target.dataset.id
       const meme = document.querySelector('#meme')
-      return e.target.parentElement.innerHTML += `
-      <form class="edit-meme-form" data-id="${memeId}">
-        <h3>Edit a Meme!</h3>
-        <label for="edit-meme">Title</label>
-       <input id="edit-title-input"type="text" name="name" value="${inputTitle}">
-       <br>
-       <label for="edit-meme">Text</label>
-       <input id="edit-text-input"type="text" name="name" value="${inputText}">
-       <br>
-       <label for="edit-meme">Image</label>
-       <input id="edit-image-input"type="text" name="image" value="${inputImage}">
-       <br>
-       <input type="submit" name="submit" value="Submit" class="submit">
-      </form>`
+      editMeme = !editMeme
+      if (editMeme) {
+        document.querySelector(`#show-${foundMeme.id}`).style.display = 'block'
+      } else {
+        document.querySelector(`#show-${foundMeme.id}`).style.display = 'none'
+      }
+    } else if (e.target.dataset.action === 'delete') {
+      let memeToDelete = e.target.dataset.id
+      fetch(`${API_END}/${memeToDelete}`, {method: "DELETE"} )
+      e.target.parentElement.remove()
     }
   })
 
-  memeContainer.addEventListener('submit', (e) => {
+  memeContainer.addEventListener('click', (e) => {
     e.preventDefault()
-    let editTitleInput = document.querySelector('#edit-title-input')
-    let editTextInput = document.querySelector('#edit-text-input')
-    let editImageInput = document.querySelector('#edit-image-input')
-    let memeId = e.target.dataset.id
-    fetch(`${API_END}/${memeId}`,{
-      method: "PATCH",
-      headers:{
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify({
-        title: editTitleInput.value,
-        meme_text: editTextInput.value,
-        image: editImageInput.value
+    if (e.target.value === "Submit") {
+      let foundMemeId = e.target.dataset.id
+      let editTitleInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#edit-title-input').value
+      let editTextInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#edit-text-input').value
+      let editImageInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#edit-image-input').value
+      fetch(`${API_END}/${foundMemeId}`,{
+        method: "PATCH",
+        headers:{
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          title: editTitleInput,
+          meme_text: editTextInput,
+          image: editImageInput
+        })
       })
-    })
-    .then(r => r.json())
-    .then((updatedData)=>{
-      let foundMeme = ALLMEMES.find(meme => {
-        return updatedData.data.id == meme.id
+      .then(r => r.json())
+      .then((updatedData)=>{
+        const foundMeme = ALLMEMES.find(meme => {
+          return updatedData.data.id == meme.id
+        })
+        const indexOfFoundMeme = ALLMEMES.indexOf(foundMeme)
+        ALLMEMES[indexOfFoundMeme] = updatedData.data
+        document.querySelector(`#meme-${foundMeme.id}`).innerHTML = memeHTML(updatedData.data)
       })
-      const indexOfFoundMeme = ALLMEMES.indexOf(foundMeme)
-      ALLMEMES[indexOfFoundMeme] = updatedData.data
-      document.querySelector('#meme').innerHTML = memeHTML(updatedData.data)
-    })
+    }
   }) //End of Event Listener
 
   memeForm.addEventListener('submit',(e)=>{
@@ -133,11 +128,35 @@ const renderAllMemes = () => {
 }
 
 const memeHTML = (meme) => {
-  return `<div id="meme">
-    <li id="meme-title">${meme.attributes.title}</li>
-    <h3 id="meme-text">${meme.attributes["meme-text"]}</h3>
-    <img id="meme-image"src="${meme.attributes.image}">
-    <button data-id="${meme.id}" data-action="edit"type="button">Edit Meme</button>
-    <button data-id="${meme.id}" data-action="delete"type="button">Delete Meme</button>
+  return `
+  <div class="card" id="meme-${meme.id}">
+    <h2 style="color: white;" id="meme-title">${meme.attributes.title}</h2>
+    <div class="meme-image-container">
+      <img class="ui medium image" id="meme-image"src="${meme.attributes.image}">
+      <div class="text-block">
+        <h3 id="h3-blocks" id="meme-text">${meme.attributes["meme-text"]}</h3>
+      </div>
+    </div><br>
+    <div id="flex-buttons">
+      <button data-id="${meme.id}" data-action="edit"type="button">Edit Meme</button>
+      <button data-id="${meme.id}" data-action="delete"type="button">Delete Meme</button>
+    </div>
+    <div class="ui form" style="display: none;" id="show-${meme.id}" class="edit-meme-form" data-id="${meme.id}">
+      <div class="fields">
+        <div class="field">
+          <h3>Edit a Meme!</h3>
+          <label style="color: white;" for="edit-meme">Title</label>
+          <input id="edit-title-input"type="text" name="name" value="${meme.attributes.title}">
+          <br>
+          <label style="color: white;" for="edit-meme">Text</label>
+          <input id="edit-text-input"type="text" name="name" value="${meme.attributes["meme-text"]}">
+          <br>
+          <label style="color: white;" for="edit-meme">Image</label>
+          <input id="edit-image-input"type="text" name="image" value="${meme.attributes.image}">
+          <br>
+          <input data-id="${meme.id}" type="submit" name="submit" value="Submit" class="submit">
+        </div>
+      </div>
+    </div>
   </div>`
 }
