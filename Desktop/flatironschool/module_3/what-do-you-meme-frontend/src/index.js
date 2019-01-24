@@ -71,8 +71,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       e.target.parentElement.parentElement.remove()
     }
+    else if (e.target.dataset.action === "like"){
+      //console.log(e.target, 'clicking like')
+      let id = e.target.dataset.id
+      let like = e.target
+      let likeCount = parseInt(like.innerText) || 0
+      like.innerText = `${++likeCount} Likes`
+      //console.log(likeCount)
+      //debugger
+      fetch(`${API_END}/${id}`,{
+        method: "PATCH",
+        headers:{
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({like: likeCount})
+      }).then (r => r.json())
+      //debugger
+    }
   })
 
+<<<<<<< HEAD
   //Event listener for changing the boolean value for the position attribute
   document.body.addEventListener('click', (e) => {
     const checker = document.querySelector('#position-checkbox')
@@ -86,6 +105,28 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   //Event listener for submitting the edit form
+=======
+// memeContainer.addEventListener('dblclick',(e)=>{
+//   if (e.target.dataset.action === "like"){
+//     console.log(e.target,'double clicking e')
+//     let id = e.target.dataset.id
+//     let like = e.target
+//     let likeCount = parseInt(like.innerText)
+//     like.innerText = `${--likeCount} Likes`
+//     //console.log(likeCount)
+//    //debugger
+//     fetch(`${API_END}/${id}`,{
+//       method: "PATCH",
+//       headers:{
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({like: likeCount})
+//     }).then (r => r.json())
+//   }
+// })
+
+>>>>>>> 1b560700c018a2c1d706d0ccf170de8e1e17072a
   memeContainer.addEventListener('click', (e) => {
     if (e.target.value === "Submit") {
       let foundMemeId = e.target.dataset.id
@@ -135,7 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
         title: inputTitle,
         image: inputImage,
         meme_text: inputText,
+<<<<<<< HEAD
         position: positionInput,
+=======
+        like: 0,
+>>>>>>> 1b560700c018a2c1d706d0ccf170de8e1e17072a
         user_id: 1
       })
     })
@@ -178,6 +223,7 @@ const memeHTML = (meme) => {
     <div id="flex-buttons">
       <button data-id="${meme.id}" data-action="edit"type="button">Edit Meme</button>
       <button data-id="${meme.id}" data-action="delete"type="button">Delete Meme</button>
+      <button data-id="${meme.id}" data-action="like" type="button">${meme.attributes.like} Likes</button>
     </div>
     <div class="ui form" style="display: none;" id="show-${meme.id}" class="edit-meme-form" data-id="${meme.id}">
       <div class="fields">
