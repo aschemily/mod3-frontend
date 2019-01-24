@@ -56,9 +56,9 @@ button:hover {
   position: relative;
 }
 
-.text-block {
+.bottom-text-block {
  position: absolute;
- top: 1px;
+ bottom: 1px;
  right: 5px;
  left: 5px;
  text-shadow: 2px 2px black;
@@ -66,6 +66,18 @@ button:hover {
  font-size: 50px;
  color: white;
  word-wrap: break-word;
+}
+
+.top-text-block {
+  position: absolute;
+  top: 1px;
+  right: 5px;
+  left: 5px;
+  text-shadow: 2px 2px black;
+  font-family: impact;
+  font-size: 50px;
+  color: white;
+  word-wrap: break-word;
 }
 
 #h3-blocks {
@@ -99,15 +111,14 @@ button:hover {
   }
 }
 
-#flex-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
 .card {
   height: 35em;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+.position-checkbox {
+  display: flex;
   justify-content: space-between;
 }

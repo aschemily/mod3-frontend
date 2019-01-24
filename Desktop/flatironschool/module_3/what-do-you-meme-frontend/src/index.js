@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   * Event Listeners
   *****************************************************************************/
 
+  //Event listener to toggle form for creating meme
   addBtn.addEventListener('click', () => {
     addMeme = !addMeme
     if (addMeme) {
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  //Event listener for search bar
   inputMemeFilter.addEventListener('input', function(e) {
   const filteredMemes = ALLMEMES.filter(function(meme) {
     return meme.attributes.title.toLowerCase().includes(e.target.value.toLowerCase())
@@ -50,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   memeContainer.innerHTML = renderAllMemes(filteredMemes)
   })
 
+  //Event listener for toggling edit form OR deleting meme
   memeContainer.addEventListener('click', (e) => {
     if (e.target.dataset.action === 'edit') {
       let foundMeme = ALLMEMES.find(meme => {
@@ -65,17 +68,31 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.target.dataset.action === 'delete') {
       let memeToDelete = e.target.dataset.id
       fetch(`${API_END}/${memeToDelete}`, {method: "DELETE"} )
+
       e.target.parentElement.parentElement.remove()
     }
   })
 
+  //Event listener for changing the boolean value for the position attribute
+  document.body.addEventListener('click', (e) => {
+    const checker = document.querySelector('#position-checkbox')
+    if (e.target.type === "checkbox") {
+      if (e.target.name === 'false') {
+        e.target.name = `true`
+      } else {
+        e.target.name = `false`
+      }
+    }
+  })
+
+  //Event listener for submitting the edit form
   memeContainer.addEventListener('click', (e) => {
-    e.preventDefault()
     if (e.target.value === "Submit") {
       let foundMemeId = e.target.dataset.id
       let editTitleInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#edit-title-input').value
       let editTextInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#edit-text-input').value
       let editImageInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#edit-image-input').value
+      let positionInput = document.querySelector(`#show-${foundMemeId}`).querySelector('#position-checkbox').name
       fetch(`${API_END}/${foundMemeId}`,{
         method: "PATCH",
         headers:{
@@ -85,7 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({
           title: editTitleInput,
           meme_text: editTextInput,
-          image: editImageInput
+          image: editImageInput,
+          position: positionInput
         })
       })
       .then(r => r.json())
@@ -100,11 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }) //End of Event Listener
 
+  //Event Listener for submit on the create form
   memeForm.addEventListener('submit',(e)=>{
     e.preventDefault()
     let inputTitle = memeTitleInput.value
     let inputText = memeTextInput.value
     let inputImage = memeImageInput.value
+    let positionInput = document.querySelector('#position-checkbox').name
     fetch(API_END, {
       method:"POST",
       headers:{
@@ -115,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title: inputTitle,
         image: inputImage,
         meme_text: inputText,
+        position: positionInput,
         user_id: 1
       })
     })
@@ -127,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.reset()
   })
 
+
 }) //END OF DOM CONTENT LOADED
 
 /*******************************************************************************
@@ -138,12 +160,18 @@ const renderAllMemes = (memes) => {
 }
 
 const memeHTML = (meme) => {
+  let topOrBottom = null
+  if (!meme.attributes.position) {
+    topOrBottom = "bottom-text-block"
+  } else if (meme.attributes.position) {
+    topOrBottom = "top-text-block"
+  }
   return `
   <div class="card" id="meme-${meme.id}">
     <h2 style="color: white;" id="meme-title">${meme.attributes.title}</h2>
     <div class="meme-image-container">
       <img class="ui medium image" id="meme-image"src="${meme.attributes.image}">
-      <div class="text-block">
+      <div class=${topOrBottom}>
         <h3 id="h3-blocks" id="meme-text">${meme.attributes["meme-text"]}</h3>
       </div>
     </div><br>
@@ -154,7 +182,6 @@ const memeHTML = (meme) => {
     <div class="ui form" style="display: none;" id="show-${meme.id}" class="edit-meme-form" data-id="${meme.id}">
       <div class="fields">
         <div class="field">
-          <h3>Edit a Meme!</h3>
           <label style="color: white;" for="edit-meme">Title</label>
           <input id="edit-title-input"type="text" name="name" value="${meme.attributes.title}">
           <br>
@@ -163,6 +190,11 @@ const memeHTML = (meme) => {
           <br>
           <label style="color: white;" for="edit-meme">Image</label>
           <input id="edit-image-input"type="text" name="image" value="${meme.attributes.image}">
+          <br>
+          <div data-id="${meme.id}" class="ui checkbox">
+            <input id="position-checkbox" type="checkbox" name="${meme.attributes.position}">
+            <label style="color: white;">Meme text on Opposite Side</label>
+          </div>
           <br>
           <input data-id="${meme.id}" type="submit" name="submit" value="Submit" class="submit">
         </div>
