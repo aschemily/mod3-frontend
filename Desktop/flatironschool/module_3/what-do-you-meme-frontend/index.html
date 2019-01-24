@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
   </head>
-  <body style="background: black;">
-    <div class="ui justified huge header" style="color: white;" align="center">DO YOU EVEN MEME?!</div>
+  <body style="background-color: black">
+    <div id="header-size" class="ui huge header" align="center">DO YOU EVEN MEME?!</div>
     <div class="container">
       <form class="add-meme-form" style="">
         <div class="ui form" align="center">
@@ -24,8 +24,12 @@
           </div>
         </div>
       </form>
-  </div>
-  <button id='new-meme-btn'>Add a new Meme!</button>
+    </div>
+    <button id='new-meme-btn'>Add a new Meme!</button><br>
+    <div class="ui fluid action input">
+      <input id="meme-search" type="text" placeholder="Search...">
+        <div class="ui button">Search</div>
+      </div><br>
     <div align="center" class="ui four column stackable center aligned page grid" id='memes-list'>
     </div>
   </body>
