@@ -91,7 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-<<<<<<< HEAD
   //Event listener for changing the boolean value for the position attribute
   document.body.addEventListener('click', (e) => {
     const checker = document.querySelector('#position-checkbox')
@@ -105,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   //Event listener for submitting the edit form
-=======
+
 // memeContainer.addEventListener('dblclick',(e)=>{
 //   if (e.target.dataset.action === "like"){
 //     console.log(e.target,'double clicking e')
@@ -126,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
 //   }
 // })
 
->>>>>>> 1b560700c018a2c1d706d0ccf170de8e1e17072a
   memeContainer.addEventListener('click', (e) => {
     if (e.target.value === "Submit") {
       let foundMemeId = e.target.dataset.id
@@ -176,11 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
         title: inputTitle,
         image: inputImage,
         meme_text: inputText,
-<<<<<<< HEAD
         position: positionInput,
-=======
         like: 0,
->>>>>>> 1b560700c018a2c1d706d0ccf170de8e1e17072a
         user_id: 1
       })
     })
