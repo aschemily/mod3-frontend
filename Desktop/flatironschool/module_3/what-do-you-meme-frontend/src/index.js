@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const memeTitleInput = document.querySelector('#meme-title-input')
   const memeTextInput = document.querySelector('#meme-text-input')
   const memeImageInput = document.querySelector('#meme-image-input')
+  const inputMemeFilter = document.querySelector('#meme-search')
 
   /*****************************************************************************
   * Fetch Onload
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .then(r => r.json())
   .then(memesObj => {
     ALLMEMES = memesObj.data
-    memeContainer.innerHTML = renderAllMemes()
+    memeContainer.innerHTML = renderAllMemes(ALLMEMES)
   })
 
   /*****************************************************************************
@@ -38,6 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       memeForm.style.display = 'none'
     }
+  })
+
+  inputMemeFilter.addEventListener('input', function(e) {
+  const filteredMemes = ALLMEMES.filter(function(meme) {
+    return meme.attributes.title.toLowerCase().includes(e.target.value.toLowerCase())
+  })
+  console.log(e.target.value)
+  console.log(filteredMemes);
+  memeContainer.innerHTML = renderAllMemes(filteredMemes)
   })
 
   memeContainer.addEventListener('click', (e) => {
@@ -55,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.target.dataset.action === 'delete') {
       let memeToDelete = e.target.dataset.id
       fetch(`${API_END}/${memeToDelete}`, {method: "DELETE"} )
-      e.target.parentElement.remove()
+      e.target.parentElement.parentElement.remove()
     }
   })
 
@@ -111,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(r => r.json())
     .then(newObj => {
       ALLMEMES.push(newObj.data)
-      memeContainer.innerHTML = renderAllMemes()
+      memeContainer.innerHTML = renderAllMemes(ALLMEMES)
       window.scrollTo(0,document.body.scrollHeight)
     })
     e.target.reset()
@@ -123,8 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
 * Helper Functions
 *******************************************************************************/
 
-const renderAllMemes = () => {
-  return ALLMEMES.map(meme => memeHTML(meme)).join('')
+const renderAllMemes = (memes) => {
+  return memes.map(meme => memeHTML(meme)).join('')
 }
 
 const memeHTML = (meme) => {
