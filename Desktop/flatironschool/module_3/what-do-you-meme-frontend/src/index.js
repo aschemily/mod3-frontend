@@ -67,7 +67,45 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`${API_END}/${memeToDelete}`, {method: "DELETE"} )
       e.target.parentElement.parentElement.remove()
     }
+    else if (e.target.dataset.action === "like"){
+      //console.log(e.target, 'clicking like')
+      let id = e.target.dataset.id
+      let like = e.target
+      let likeCount = parseInt(like.innerText) || 0
+      like.innerText = `${++likeCount} Likes`
+      //console.log(likeCount)
+      //debugger
+      fetch(`${API_END}/${id}`,{
+        method: "PATCH",
+        headers:{
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({like: likeCount})
+      }).then (r => r.json())
+      //debugger
+    }
   })
+
+// memeContainer.addEventListener('dblclick',(e)=>{
+//   if (e.target.dataset.action === "like"){
+//     console.log(e.target,'double clicking e')
+//     let id = e.target.dataset.id
+//     let like = e.target
+//     let likeCount = parseInt(like.innerText)
+//     like.innerText = `${--likeCount} Likes`
+//     //console.log(likeCount)
+//    //debugger
+//     fetch(`${API_END}/${id}`,{
+//       method: "PATCH",
+//       headers:{
+//         'Accept': 'application/json',
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({like: likeCount})
+//     }).then (r => r.json())
+//   }
+// })
 
   memeContainer.addEventListener('click', (e) => {
     e.preventDefault()
@@ -115,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title: inputTitle,
         image: inputImage,
         meme_text: inputText,
+        like: 0,
         user_id: 1
       })
     })
@@ -150,6 +189,7 @@ const memeHTML = (meme) => {
     <div id="flex-buttons">
       <button data-id="${meme.id}" data-action="edit"type="button">Edit Meme</button>
       <button data-id="${meme.id}" data-action="delete"type="button">Delete Meme</button>
+      <button data-id="${meme.id}" data-action="like" type="button">${meme.attributes.like} Likes</button>
     </div>
     <div class="ui form" style="display: none;" id="show-${meme.id}" class="edit-meme-form" data-id="${meme.id}">
       <div class="fields">
