@@ -47,8 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const filteredMemes = ALLMEMES.filter(function(meme) {
     return meme.attributes.title.toLowerCase().includes(e.target.value.toLowerCase())
   })
-  console.log(e.target.value)
-  console.log(filteredMemes);
   memeContainer.innerHTML = renderAllMemes(filteredMemes)
   })
 
@@ -68,17 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.target.dataset.action === 'delete') {
       let memeToDelete = e.target.dataset.id
       fetch(`${API_END}/${memeToDelete}`, {method: "DELETE"} )
-
       e.target.parentElement.parentElement.remove()
     }
     else if (e.target.dataset.action === "like"){
-      //console.log(e.target, 'clicking like')
       let id = e.target.dataset.id
       let like = e.target
       let likeCount = parseInt(like.innerText) || 0
       like.innerText = `${++likeCount} Likes`
-      //console.log(likeCount)
-      //debugger
       fetch(`${API_END}/${id}`,{
         method: "PATCH",
         headers:{
@@ -87,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({like: likeCount})
       }).then (r => r.json())
-      //debugger
     }
   })
 
@@ -102,28 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   })
-
-  //Event listener for submitting the edit form
-
-// memeContainer.addEventListener('dblclick',(e)=>{
-//   if (e.target.dataset.action === "like"){
-//     console.log(e.target,'double clicking e')
-//     let id = e.target.dataset.id
-//     let like = e.target
-//     let likeCount = parseInt(like.innerText)
-//     like.innerText = `${--likeCount} Likes`
-//     //console.log(likeCount)
-//    //debugger
-//     fetch(`${API_END}/${id}`,{
-//       method: "PATCH",
-//       headers:{
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({like: likeCount})
-//     }).then (r => r.json())
-//   }
-// })
 
   memeContainer.addEventListener('click', (e) => {
     if (e.target.value === "Submit") {
@@ -207,7 +178,7 @@ const memeHTML = (meme) => {
     topOrBottom = "top-text-block"
   }
   return `
-  <div class="card" id="meme-${meme.id}">
+  <div style="overflow-y: overlay;" class="card" id="meme-${meme.id}">
     <h2 style="color: white;" id="meme-title">${meme.attributes.title}</h2>
     <div class="meme-image-container">
       <img class="ui medium image" id="meme-image"src="${meme.attributes.image}">
