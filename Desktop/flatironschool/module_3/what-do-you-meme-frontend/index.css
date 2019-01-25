@@ -117,14 +117,11 @@ button:hover {
   flex-direction: column;
   box-shadow: 2px 2px 30px 1px white;
   justify-content: space-between;
+  overflow-y: overlay;
 }
 
 .position-checkbox {
   display: flex;
   justify-content: space-between;
   -webkit-background-origin: content-box;
-}
-
-.edit-meme-form {
-  overflow-y: overlay;
 }
