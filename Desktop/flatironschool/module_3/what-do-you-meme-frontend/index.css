@@ -115,6 +115,7 @@ button:hover {
   height: 35em;
   display: flex;
   flex-direction: column;
+  box-shadow: 2px 2px 30px 1px white;
   justify-content: space-between;
 }
 
@@ -122,11 +123,8 @@ button:hover {
   display: flex;
   justify-content: space-between;
   -webkit-background-origin: content-box;
-  box-shadow: 2px 2px 30px 1px white;
 }
 
-#edit-meme-form {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: ;
+.edit-meme-form {
+  overflow-y: overlay;
 }
