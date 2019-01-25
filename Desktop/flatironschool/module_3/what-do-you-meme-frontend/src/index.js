@@ -178,7 +178,7 @@ const memeHTML = (meme) => {
     topOrBottom = "top-text-block"
   }
   return `
-  <div style="overflow-y: overlay;" class="card" id="meme-${meme.id}">
+  <div class="card" id="meme-${meme.id}">
     <h2 style="color: white;" id="meme-title">${meme.attributes.title}</h2>
     <div class="meme-image-container">
       <img class="ui medium image" id="meme-image"src="${meme.attributes.image}">
