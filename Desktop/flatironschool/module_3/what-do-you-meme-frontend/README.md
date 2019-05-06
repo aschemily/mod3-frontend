@@ -1,6 +1,6 @@
 ## What Do You Meme
 
-What Do You Meme is a single page web application designed for meme lovers to create their own. This Vanilla JavsaScript app allows users to select images from online, upload them and create a caption that can either be displayed on the top or bottom of the photo. 
+What Do You Meme is a single page web application designed for meme lovers to create their own. This Vanilla JavsaScript app allows users to select images from online, upload them and create a caption that can either be displayed on the top or bottom of the photo. This project was a pair project with Michael Muniz.
 
 
 ### Technologies 
