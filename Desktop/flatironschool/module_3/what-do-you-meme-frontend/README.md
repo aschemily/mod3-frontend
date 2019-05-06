@@ -9,7 +9,7 @@ What Do You Meme was created with a Ruby on Rails backend with a PostgressSQL da
 
 - Semantic UI 
 
-Github to backend can be found [here] (https://github.com/aschemily/what_do_you_meme_backend)
+Github to backend can be found [here](https://github.com/aschemily/what_do_you_meme_backend)
 
 ### Key Features
 The full demo can be found on YouTube [here](https://www.youtube.com/watch?v=NRoxwPnspIM)
